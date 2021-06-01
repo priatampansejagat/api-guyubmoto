@@ -55,4 +55,21 @@ class BaseController extends Controller
 		//--------------------------------------------------------------------
 		// E.g.: $this->session = \Config\Services::session();
 	}
+
+	public function success_response($dataArr){
+		$obj=array();
+		$obj['status']    = 200;
+		$obj['proc']      = 'true';
+		$obj['data']      = $dataArr;
+
+		echo (json_encode($obj));
+	}
+	public function failed_response($dataArr){
+		$obj=array();
+		$obj['status']    = 500;
+		$obj['proc']      = 'false';
+		$obj['data']      = $dataArr;
+
+		echo (json_encode($obj));
+	}
 }

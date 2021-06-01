@@ -63,6 +63,8 @@ class Auth extends BaseController{
           $data_user['email'] = $data['email'];
           $data_user['uname'] = $data['username'];
           $data_user['passwd'] = $data['password'];
+          $data_user['instagram'] = $data['instagram'];
+          $data_user['portfolio'] = $data['portfolio'];
 
           $create_account = $this->auth_model->createAccount($data_user);
           if ($create_account) {

@@ -50,6 +50,8 @@ class AuthModel extends Model{
       'address '        => isset($arrData['address']) ? $arrData['address'] : "",
       'city '           => isset($arrData['city']) ? $arrData['city'] : "",
       'country '        => isset($arrData['country']) ? $arrData['country'] : "",
+      'instagram '      => isset($arrData['instagram']) ? $arrData['instagram'] : "",
+      'portfolio '      => isset($arrData['portfolio']) ? $arrData['portfolio'] : "",
       'picture_profile' => isset($arrData['picture_profile']) ? $arrData['picture_profile'] : ""
     ];
 
