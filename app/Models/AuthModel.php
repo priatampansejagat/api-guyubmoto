@@ -18,15 +18,30 @@ class AuthModel extends Model{
     return $decoded;
   }
 
+  public function getLoginInfo_byID($id){
+
+    $db      = \Config\Database::connect();
+    $builder = $db->table('login');
+
+    $builder->where('id',$id);
+    $query = $builder->get()->getResult();
+
+    $encoded = json_encode($query);
+    $decoded = json_decode($encoded,true);
+    return $decoded;
+  }
+
   public function createAccount($arrData){
     $db      = \Config\Database::connect();
 
     $uname = $arrData['uname'];
     $hash_passwd = crypt($arrData['passwd'], BLOWFISH_KEY);
+    $level = $arrData['level'];
 
     $data = [
         'username' => $uname,
-        'password'  => $hash_passwd
+        'password'  => $hash_passwd,
+        'level'  => $level
     ];
 
     return $db->table('login')->insert($data) == true ? true : false ;
@@ -56,6 +71,19 @@ class AuthModel extends Model{
     ];
 
     return $db->table('personal_data')->insert($data) == true ? true : false ;
+
+  }
+
+  public function createFamilyAdmission($arrData){
+    $db      = \Config\Database::connect();
+
+    // Untuk Login_id harus ada
+    $data = [
+      'login_id '       => $arrData['login_id'],
+      'admission'       => isset($arrData['admission']) ? $arrData['admission'] : ""
+    ];
+
+    return $db->table('family_admission')->insert($data) == true ? true : false ;
 
   }
 

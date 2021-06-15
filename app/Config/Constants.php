@@ -79,3 +79,7 @@ defined('EXIT__AUTO_MIN')      || define('EXIT__AUTO_MIN', 9); // lowest automat
 defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 define('BLOWFISH_KEY', '$2a$07$ihateapplebutiuseitfuck$');
+
+define('USER_LEVEL_ROOT', '1');
+define('USER_LEVEL_ADMIN', '2');
+define('USER_LEVEL_COMMON', '3');

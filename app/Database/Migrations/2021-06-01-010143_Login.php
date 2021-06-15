@@ -16,6 +16,7 @@ class Login extends Migration
 															'id BIGINT(20) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT',
 															'username VARCHAR(255) UNIQUE',
 															'password TEXT',
+															'level VARCHAR(5)',
 															'created_at DATETIME DEFAULT CURRENT_TIMESTAMP'
 															]);
 

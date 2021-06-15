@@ -3,19 +3,22 @@
 namespace App\Controllers;
 
 use App\Models\AuthModel;
+use App\Models\UsersModel;
 class Auth extends BaseController{
 
   protected $auth_model;
+  protected $users_model;
 
   public function __construct(){
     $this->auth_model = new AuthModel();
+    $this->users_model = new UsersModel();
   }
 
   public function login_check(){
     $data = $this->request->getPost();
 
     if (isset($data['username'])) {
-      if ($data['username'] != '' && $data['username'] != NULL) {
+      if ($data['username'] != '' && $data['username'] != NULL && $data['password'] != '' && $data['password'] != NULL) {
 
         $login_data = $this->auth_model->getLoginInfo($data['username']);
 
@@ -23,7 +26,16 @@ class Auth extends BaseController{
           $hash_passwd = crypt($data['password'], BLOWFISH_KEY);
 
           if ($hash_passwd == $login_data[0]['password']) {
-            $this->success_response(array('status' => 'success'));
+
+            // GET ADMISSION
+            $admissin_data = $this->users_model->getAdmissionByLoginId($login_data[0]['id']);
+            $login_data[0]['admission'] = $admissin_data['admission'];
+
+            // Filter data yang dikirim
+            unset($login_data[0]['password']);
+            // LOGIN SUKSES
+            $this->success_response(array('status' => 'success','data_login' => $login_data[0]));
+
           }else {
             $this->success_response(array('status' => 'failed',
                                           'message' => 'Login failed'
@@ -36,7 +48,15 @@ class Auth extends BaseController{
                                       ));
         }
 
+      }else {
+        $this->success_response(array('status' => 'failed',
+                                      'message' => 'Please fill email, username and password :)'
+                                    ));
       }
+    }else {
+      $this->success_response(array('status' => 'failed',
+                                    'message' => 'Please fill email, username and password :)'
+                                  ));
     }
 
     // $md5pass = md5($data['password']);
@@ -62,9 +82,11 @@ class Auth extends BaseController{
 
           $data_user['email'] = $data['email'];
           $data_user['uname'] = $data['username'];
+          $data_user['level'] = USER_LEVEL_COMMON;
           $data_user['passwd'] = $data['password'];
           $data_user['instagram'] = $data['instagram'];
           $data_user['portfolio'] = $data['portfolio'];
+          $data_user['admission'] = 'false';
 
           $create_account = $this->auth_model->createAccount($data_user);
           if ($create_account) {
@@ -73,6 +95,7 @@ class Auth extends BaseController{
             $data_user['login_id'] = $cek_login_data[0]['id'];
 
             $create_personal_data = $this->auth_model->createPersonalData($data_user);
+            $create_admission = $this->auth_model->createFamilyAdmission($data_user);
 
             $this->success_response(array('status' => 'success'));
 
@@ -93,6 +116,10 @@ class Auth extends BaseController{
                                   ));
     }
 	}
+
+  public function user_register_admin(){
+
+  }
 
 	public function reset_password(){
 
