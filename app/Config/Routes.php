@@ -34,6 +34,24 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 
+
+$routes->group('family', function($routes){
+
+	$routes->group('myworks', function($routes){
+		$routes->add('photography/list_photography', 'Family\MyWorks\Photography::list_photography');
+		$routes->add('photography/count_photography', 'Family\MyWorks\Photography::count_photography');
+		$routes->add('photography/delete_photography', 'Family\MyWorks\Photography::delete_photography');
+		$routes->add('photography/upload', 'Family\MyWorks\Photography::upload');
+		$routes->add('photography/upload_file', 'Family\MyWorks\Photography::upload_file');
+	});
+
+	$routes->group('aboutme', function($routes){
+		$routes->add('biography/refresh', 'Family\AboutMe\Biography::refresh');
+		$routes->add('biography/update', 'Family\AboutMe\Biography::update');
+		$routes->add('biography/updateProfilePic', 'Family\AboutMe\Biography::updateProfilePic');
+	});
+
+});
 /*
  * --------------------------------------------------------------------
  * Additional Routing
