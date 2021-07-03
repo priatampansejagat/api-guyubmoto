@@ -135,11 +135,7 @@ class Auth extends BaseController{
 
     // get data user
     $user_data = $this->users_model->getDataUser_byUsername($data['username']);
-<<<<<<< HEAD
     $to = $user_data['data_personal_data']['email'];
-=======
-    $to = $user_data['email'];
->>>>>>> ff9a4de3c7d3ed3235506257ac427919fd0bd4b2
     // generate new password
     $newPassword = generateRandomString();
     $md5pass  = md5($newPassword);
