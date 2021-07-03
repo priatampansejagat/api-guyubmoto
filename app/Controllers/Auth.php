@@ -4,14 +4,19 @@ namespace App\Controllers;
 
 use App\Models\AuthModel;
 use App\Models\UsersModel;
+
+use App\Libraries\Mailib;
+
 class Auth extends BaseController{
 
   protected $auth_model;
   protected $users_model;
 
+  protected $mail;
   public function __construct(){
     $this->auth_model = new AuthModel();
     $this->users_model = new UsersModel();
+    $this->mail = new Mailib();
   }
 
   public function login_check(){
@@ -121,7 +126,35 @@ class Auth extends BaseController{
 
   }
 
-	public function reset_password(){
+	public function password_reset(){
+    $data = $this->request->getPost();
+    $from = EMAIL_ADDRESS;
+    $to = '';
+    $subject = 'Reset Password From Guyubmoto';
+    $message = '';
+
+    // get data user
+    $user_data = $this->users_model->getDataUser_byUsername($data['username']);
+
+    // generate new password
+    $newPassword = generateRandomString();
+    $md5pass  = md5($newPassword);
+    $blowfishPass = crypt($md5pass, BLOWFISH_KEY);
+
+    // save new password
+    $save_newPass = $this->auth_model->updateAccount_byUsername($data['username'],array('password' => $blowfishPass));
+
+    if ($save_newPass) {
+      // send mail
+      $to = $user_data['email'];
+      $message = 'Hello, Berikut adalah password baru kamu : <br>'.$newPassword;
+      $this->mail->_init($from,$to,$subject,$message);
+      $this->mail->send_mail();
+
+      $this->success_response(array('status' => 'success'));
+    }else{
+      $this->success_response(array('status' => 'failed'));
+    }
 
 	}
 

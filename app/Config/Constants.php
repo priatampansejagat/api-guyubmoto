@@ -83,3 +83,5 @@ define('BLOWFISH_KEY', '$2a$07$ihateapplebutiuseitfuck$');
 define('USER_LEVEL_ROOT', '1');
 define('USER_LEVEL_ADMIN', '2');
 define('USER_LEVEL_COMMON', '3');
+
+define('EMAIL_ADDRESS', 'temancreator@guyubmoto.com');

@@ -48,6 +48,19 @@ class AuthModel extends Model{
 
   }
 
+  public function updateAccount_byUsername($username, $arrData){
+    $db      = \Config\Database::connect();
+
+    $builder = $db->table('login');
+
+    $builder->set($arrData);
+    $builder->where('username', $username);
+    $query = $builder->update();
+
+    return $query;
+
+  }
+
   public function createPersonalData($arrData){
     $db      = \Config\Database::connect();
 
@@ -86,6 +99,8 @@ class AuthModel extends Model{
     return $db->table('family_admission')->insert($data) == true ? true : false ;
 
   }
+
+
 
 
 }

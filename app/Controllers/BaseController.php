@@ -36,7 +36,7 @@ class BaseController extends Controller
 	 *
 	 * @var array
 	 */
-	protected $helpers = ['images_helper'];
+	protected $helpers = ['images_helper','stringgenerator_helper'];
 
 	/**
 	 * Constructor.
