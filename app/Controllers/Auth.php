@@ -5,18 +5,19 @@ namespace App\Controllers;
 use App\Models\AuthModel;
 use App\Models\UsersModel;
 
-use App\Libraries\Mailib;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+require 'vendor/autoload.php';
 
 class Auth extends BaseController{
 
   protected $auth_model;
   protected $users_model;
 
-  protected $mail;
   public function __construct(){
     $this->auth_model = new AuthModel();
     $this->users_model = new UsersModel();
-    $this->mail = new Mailib();
   }
 
   public function login_check(){
@@ -131,11 +132,11 @@ class Auth extends BaseController{
     $from = EMAIL_ADDRESS;
     $to = '';
     $subject = 'Reset Password From Guyubmoto';
-    $message = '';
+    $message = 'Hello, Berikut adalah password baru kamu : <br>';
 
     // get data user
     $user_data = $this->users_model->getDataUser_byUsername($data['username']);
-
+    $to = $user_data['email'];
     // generate new password
     $newPassword = generateRandomString();
     $md5pass  = md5($newPassword);
@@ -146,10 +147,27 @@ class Auth extends BaseController{
 
     if ($save_newPass) {
       // send mail
-      $to = $user_data['email'];
-      $message = 'Hello, Berikut adalah password baru kamu : <br>'.$newPassword;
-      $this->mail->_init($from,$to,$subject,$message);
-      $this->mail->send_mail();
+      // Settings
+      //Server settings
+      $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+      $mail->isSMTP();                                            //Send using SMTP
+      $mail->Host       = 'smtp.guyubmoto.com';                     //Set the SMTP server to send through
+      $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+      $mail->Username   = 'temancreator@guyubmoto.com';                     //SMTP username
+      $mail->Password   = 'or4ngt4mp4n';                               //SMTP password
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+      $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+      //Recipients
+      $mail->setFrom($from, 'Mailer');
+      $mail->addAddress($to);               //Name is optional
+
+      //Content
+      $mail->isHTML(true);                                  //Set email format to HTML
+      $mail->Subject = $subject;
+      $mail->Body    = $message . $newPassword;
+
+      $mail->send();
 
       $this->success_response(array('status' => 'success'));
     }else{
