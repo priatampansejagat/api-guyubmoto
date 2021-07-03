@@ -147,8 +147,8 @@ class Auth extends BaseController{
     if ($save_newPass) {
       // send mail
       // Settings
-      //Server settings
-      $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+      $mail = new PHPMailer(true);
+      // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
       $mail->isSMTP();                                            //Send using SMTP
       $mail->Host       = 'smtp.guyubmoto.com';                     //Set the SMTP server to send through
       $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
