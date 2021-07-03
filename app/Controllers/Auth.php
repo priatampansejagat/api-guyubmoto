@@ -158,7 +158,7 @@ class Auth extends BaseController{
       $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
       //Recipients
-      $mail->setFrom($from, 'Mailer');
+      $mail->setFrom($from, 'Teman Creator @ Guyubmoto');
       $mail->addAddress($to);               //Name is optional
 
       //Content
